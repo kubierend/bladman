@@ -1,0 +1,316 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextcloud
+  namespace: argocd
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nextcloud
+  sources:
+    - repoURL: https://github.com/kubelize/kube-projects
+      targetRevision: dev
+      path: base/stable/nextcloud/deploy
+    - repoURL: https://nextcloud.github.io/helm/
+      targetRevision: 6.6.2
+      chart: nextcloud
+      helm:
+        parameters: []
+        valuesObject:
+          image:
+            flavour: fpm
+            # repository: kubelize/nextcloud
+            repository: nextcloud
+            # tag: 0.1.3
+          podLabels:
+            cronjob: nextcloud
+          phpClientHttpsFix:
+            enabled: true
+            protocol: https
+          ingress:
+            enabled: true
+            className: nginx
+            annotations:
+              nginx.ingress.kubernetes.io/affinity: cookie
+              nginx.ingress.kubernetes.io/proxy-body-size: "0"
+              nginx.ingress.kubernetes.io/proxy-buffer-size: 4k
+              nginx.ingress.kubernetes.io/proxy-buffering: "off"
+              nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+              nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+              nginx.ingress.kubernetes.io/proxy-request-buffering: "on"
+              nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+              # nginx.ingress.kubernetes.io/enable-cors: "true" # Breaks dav funtionality on Andriod. See https://github.com/nextcloud/helm/issues/410
+              nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For"
+              kubernetes.io/tls-acme: "true"
+              cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+              nginx.ingress.kubernetes.io/server-snippet: |-
+                server_tokens off;
+                proxy_hide_header X-Powered-By;
+                rewrite ^/.well-known/webfinger /index.php/.well-known/webfinger last;
+                rewrite ^/.well-known/nodeinfo /index.php/.well-known/nodeinfo last;
+                rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+                rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json;
+                location = /.well-known/carddav {
+                  return 301 $scheme://$host/remote.php/dav;
+                }
+                location = /.well-known/caldav {
+                  return 301 $scheme://$host/remote.php/dav;
+                }
+                location = /robots.txt {
+                  allow all;
+                  log_not_found off;
+                  access_log off;
+                }
+                location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+                  deny all;
+                }
+                location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
+                  deny all;
+                }
+            tls:
+              - secretName: nextcloud-tls
+                hosts:
+                  - nextcloud.kube.home
+          nginx:
+            enabled: true
+            image:
+              repository: nginxinc/nginx-unprivileged
+              tag: alpine3.20
+            containerPort: 8080
+            config:
+              default: false
+              custom: |
+                upstream php-handler {
+                    server 127.0.0.1:9000;
+                }
+                server {
+                    listen 8080;
+                    add_header Referrer-Policy "no-referrer" always;
+                    add_header X-Content-Type-Options "nosniff" always;
+                    add_header X-Download-Options "noopen" always;
+                    add_header X-Frame-Options "SAMEORIGIN" always;
+                    add_header X-Permitted-Cross-Domain-Policies "none" always;
+                    add_header X-Robots-Tag "noindex, nofollow" always;
+                    add_header X-XSS-Protection "1; mode=block" always;
+                    client_max_body_size 10G;
+                    fastcgi_buffers 64 4K;
+                    fastcgi_read_timeout 3600s;
+                    gzip on;
+                    gzip_vary on;
+                    gzip_comp_level 4;
+                    gzip_min_length 256;
+                    gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
+                    gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+                    fastcgi_hide_header X-Powered-By;
+                    include mime.types;
+                    types {
+                        text/javascript js mjs;
+                    }
+                    root /var/www/html;
+                    index index.php index.html /index.php$request_uri;
+                    location = / {
+                        if ( $http_user_agent ~ ^DavClnt ) {
+                            return 302 /remote.php/webdav/$is_args$args;
+                        }
+                    }
+                    location = /robots.txt {
+                        allow all;
+                        log_not_found off;
+                        access_log off;
+                    }
+                    location ^~ /.well-known {
+                        location = /.well-known/carddav     { return 301 /remote.php/dav/; }
+                        location = /.well-known/caldav      { return 301 /remote.php/dav/; }
+                        location ^~ /.well-known            { return 301 /index.php$uri; }
+                        try_files $uri $uri/ =404;
+                    }
+                    location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)  { return 404; }
+                    location ~ ^/(?:\.|autotest|occ|issue|indie|db_|console)              { return 404; }
+                    location ~ \.php(?:$|/) {
+                        rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[ms]-provider\/.+|.+\/richdocumentscode(_arm64)?\/proxy) /index.php$request_uri;
+                        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+                        set $path_info $fastcgi_path_info;
+                        try_files $fastcgi_script_name =404;
+                        include fastcgi_params;
+                        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                        fastcgi_param PATH_INFO $path_info;
+                        fastcgi_param modHeadersAvailable true;
+                        fastcgi_param front_controller_active true;
+                        fastcgi_pass php-handler;
+                        fastcgi_intercept_errors on;
+                        fastcgi_request_buffering off;
+                    }
+                    location ~ \.(?:css|js|svg|gif)$ {
+                        try_files $uri /index.php$request_uri;
+                        expires 6M;
+                        access_log off;
+                    }
+                    location ~ \.woff2?$ {
+                        try_files $uri /index.php$request_uri;
+                        expires 7d;
+                        access_log off;
+                    }
+                    location / {
+                        try_files $uri $uri/ /index.php$request_uri;
+                    }
+                }
+              headers:
+                "Strict-Transport-Security": ""
+                "Referrer-Policy": "no-referrer"
+                "X-Content-Type-Options": "nosniff"
+                "X-Download-Options": "noopen"
+                "X-Frame-Options": "SAMEORIGIN"
+                "X-Permitted-Cross-Domain-Policies": "none"
+                "X-Robots-Tag": "noindex, nofollow"
+                "X-XSS-Protection": "1; mode=block"          
+            securityContext:
+              runAsUser: 82
+              runAsGroup: 82
+              runAsNonRoot: true
+              readOnlyRootFilesystem: false
+          nextcloud:
+            configs:
+              custom.config.php: |
+                <?php
+                  $CONFIG = array(
+                    "check_data_directory_permissions"=> false,
+                    "trusted_domains" => array (
+                      $_ENV["NEXTCLOUD_TRUSTED_DOMAINS"],
+                    ),
+                  );
+              proxy.config.php: |-
+                <?php
+                $CONFIG = array (
+                  'trusted_proxies' => array(
+                    0 => '127.0.0.1',
+                    1 => '10.0.0.0/8',
+                  ),
+                  'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
+                );
+              previews.config.php: |-
+                <?php
+                $CONFIG = array (
+                  'enable_previews' => true,
+                  'enabledPreviewProviders' => array (
+                    'OC\Preview\Movie',
+                    'OC\Preview\PNG',
+                    'OC\Preview\JPEG',
+                    'OC\Preview\GIF',
+                    'OC\Preview\BMP',
+                    'OC\Preview\XBitmap',
+                    'OC\Preview\MP3',
+                    'OC\Preview\MP4',
+                    'OC\Preview\TXT',
+                    'OC\Preview\MarkDown',
+                    'OC\Preview\PDF'
+                  ),
+                );
+            extraEnv:
+              - name: PHP_INI_SCAN_DIR
+                value: ":/usr/local/etc/php-fpm.d/"
+            defaultConfigs:
+              .htaccess: false
+              apache-pretty-urls.config.php: false
+              s3.config.php: false
+              smtp.config.php: true
+              swift.config.php: false
+            phpConfigs:
+              zz-pm_children.ini: |-
+                pm=dynamic
+                pm.max_children=120
+                pm.start_servers=12
+                pm.min_spare_servers=6
+                pm.max_spare_servers=18
+              zz-max_upload_size.ini: |-
+                upload_max_filesize=10240M
+                post_max_size=10240M
+              zz-memory-limit.ini: |-
+                memory_limit=1024M
+              zz-timeout.ini: |-
+                request_terminate_timeout=3600
+                max_execution_time=3600
+            username: admin
+            password: initial-access-1234!
+            containerPort: 8080
+            securityContext:
+              runAsUser: 82
+              runAsGroup: 82
+              runAsNonRoot: true
+              readOnlyRootFilesystem: false
+            # podSecurityContext:
+            #   fsGroup: 33
+            extraVolumes:
+              - name: before-starting-scripts
+                configMap:
+                  name: before-starting-scripts
+                  defaultMode: 0550
+              - name: nginx-cache
+                emptyDir: {}
+            extraVolumeMounts:
+              - name: before-starting-scripts
+                mountPath: /docker-entrypoint-hooks.d/before-starting/install-apps.sh
+                subPath: install-apps.sh
+              - name: nginx-cache
+                mountPath: "/var/cache/nginx"
+            extraInitContainers:
+              - name: nextcloud-init
+                image: nextcloud:30.0.4-fpm-alpine
+                command:
+                  - sh
+                  - "-c"
+                  - |-
+                    /bin/chown -R 82:82 /var/www/html
+                    find /var/www/html -type d -exec chmod 750 {} \;
+                    find /var/www/html -type f -exec chmod 640 {} \;
+                securityContext:
+                  capabilities:
+                    add: ["CHOWN"]
+          internalDatabase:
+            enabled: false
+          externalDatabase:
+            enabled: true
+            type: mysql
+            database: nextcloud
+            existingSecret:
+              enabled: true
+              secretName: "nextcloud-mariadb-auth"
+              usernameKey: mariadb-username
+              passwordKey: mariadb-password
+          # https://github.com/bitnami/charts/tree/main/bitnami/mariadb
+          mariadb:
+            enabled: true
+            image: 
+              tag: 11.3.2-debian-12-r5
+            auth:
+              existingSecret: "nextcloud-mariadb-auth"
+            primary:
+              resourcesPreset: "small"
+              persistence:
+                enabled: true
+          # https://github.com/bitnami/charts/tree/main/bitnami/redis
+          redis:
+            enabled: true
+            image: 
+              tag: 7.2.5-debian-12-r4
+            auth:
+              enabled: true
+              existingSecret: "nextcloud-redis-auth"
+              existingSecretPasswordKey: "redis-password"
+            master:
+              resourcesPreset: "micro"
+              persistence:
+                enabled: false
+            replica:
+              resourcesPreset: "micro"
+              persistence:
+                enabled: false
+          persisitence:
+            enabled: false
