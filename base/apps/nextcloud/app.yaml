@@ -16,9 +16,6 @@ spec:
     server: https://kubernetes.default.svc
     namespace: nextcloud
   sources:
-    - repoURL: https://github.com/kubelize/kube-projects
-      targetRevision: dev
-      path: base/stable/nextcloud/deploy
     - repoURL: https://nextcloud.github.io/helm/
       targetRevision: 6.6.2
       chart: nextcloud
