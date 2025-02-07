@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+name: nextcloud
+metadata:
+  name: nextcloud
+  namespace: argocd
+spec:
+  sources:
+    - helm:
+        valuesObject:
+          ingress:
+            tls:
+              hosts:
+                - drive.k8s.phonkd.net
