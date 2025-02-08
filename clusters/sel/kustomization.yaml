@@ -3,4 +3,7 @@ kind: Kustomization
 resources:
   - ../../base/apps/nextcloud
 patches:
-  - path: nextcloud.yaml
+  - path: ./patches/nc.yaml
+    target:
+      kind: Application
+      name: nextcloud
