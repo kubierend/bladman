@@ -15,3 +15,4 @@
   value:
     enabled: true
     size: 100Gi
+    storageClass: longhorn
