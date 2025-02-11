@@ -1,0 +1,35 @@
+ingress:
+  enabled: true
+  ingressClassName: ""
+  hostname: wordpress.home
+  path: /
+  annotations:
+    - kubernetes.io/ingress.class: wordpresshome
+    - cert-manager.io/cluster-issuer: letsencrypt-prod
+  tls: true
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: longhorn
+global:
+  defaultStorageclass: "longhorn"
+
+wordpressUsername: vmadmin
+existingSecret: wp-template-wp-secret
+wordpressEmail: default@invalid.com
+wordpressFirstName: vmadmin
+wordpressBlogName: "wp-template"
+wordpressSkipInstall: true
+mariadb:
+  enabled: true
+  architecture: standalone
+  primary:
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClass: longhorn
+  auth:
+    rootPassword: "sml12345"
+    password: "sml12345"
+    database: bitnami_wordpress
+    username: bn_wordpress

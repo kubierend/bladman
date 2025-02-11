@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wp-template
+spec:
+  destination:
+    name: ""
+    namespace: wp-template
+    server: https://kubernetes.default.svc
+  source:
+    path: ""
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 24.1.9
+    directory:
+      jsonnet:
+        tlas:
+          - {}
+    chart: wordpress
+    helm:
+      values: ""
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
