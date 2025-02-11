@@ -18,6 +18,8 @@ spec:
     chart: wordpress
     helm:
       values: ""
+      valueFiles:
+        - ./values.yaml
   sources: []
   project: default
   syncPolicy:
