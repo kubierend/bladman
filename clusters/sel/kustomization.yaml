@@ -2,8 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base/apps/nextcloud
+  - ../../base/apps/wordpress
 patches:
   - path: ./patches/nc.yaml
     target:
       kind: Application
       name: nextcloud
+  - path: ./patches/wordpress-1.yaml
+    target:
+      kind: Application
+      name: wordpress-1

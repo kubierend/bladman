@@ -7,20 +7,21 @@ spec:
     name: ""
     namespace: wp-template
     server: https://kubernetes.default.svc
-  source:
-    path: ""
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 24.1.9
-    directory:
-      jsonnet:
-        tlas:
-          - {}
-    chart: wordpress
-    helm:
-      values: ""
-      valueFiles:
-        - ./values.yaml
-  sources: []
+  sources:
+    - path: ""
+      repoURL: https://charts.bitnami.com/bitnami
+      targetRevision: 24.1.9
+      directory:
+        jsonnet:
+          tlas:
+            - {}
+      chart: wordpress
+      helm:
+        valueFiles:
+          - $values/base/apps/wordpress/values.yaml
+    - repoURL: "https://github.com/kubierend/bladman.git"
+      targetRevision: main
+      ref: values
   project: default
   syncPolicy:
     automated:
