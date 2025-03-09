@@ -24,6 +24,8 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
+        prometheus:
+          deployment: true
   project: default
   syncPolicy:
     automated:
