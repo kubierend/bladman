@@ -1,9 +1,9 @@
 - op: replace
   path: "/spec/destination/namespace"
   value: monit
-- op: replace
+- op: add
   path: "/spec/source/helm/valuesObject/grafana/grafana.ini/server/domain"
   value: kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net
-- op: replace
+- op: add
   path: "/spec/source/helm/valuesObject/grafana/grafana.ini/server/root_url"
   value: "https://kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net/"
