@@ -1,4 +1,3 @@
 - op: replace
-  path: "/spec/destination"
-  value:
-    - namespace: monit
+  path: "/spec/destination/namespace"
+  value: monit
