@@ -26,6 +26,11 @@ spec:
                   storage: 50Gi
         prometheus:
           deployment: true
+        grafana:
+          grafana.ini:
+            server:
+              domain: grafana.example.com
+              root_url: http://grafana.example.com
   project: default
   syncPolicy:
     automated:
