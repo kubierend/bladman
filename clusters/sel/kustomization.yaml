@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../../base/apps/nextcloud
   - ../../base/apps/wordpress
+  - ../../base/apps/prometheus
 patches:
   - path: ./patches/nc.yaml
     target:
@@ -12,3 +13,7 @@ patches:
     target:
       kind: Application
       name: wordpress-1
+  - path: ./patches/prom.yaml
+    target:
+      kind: Application
+      name: prometheus
