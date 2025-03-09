@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - ../../base/apps/nextcloud
   #- ../../base/apps/wordpress
-  - ../../base/apps/prometheus
+  - ../../base/apps/kube-promstack
 patches:
   - path: ./patches/nc.yaml
     target:
@@ -16,4 +16,4 @@ patches:
   - path: ./patches/prom.yaml
     target:
       kind: Application
-      name: prometheus
+      name: kube-prom-stack

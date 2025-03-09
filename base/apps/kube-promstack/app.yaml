@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prom-stack
+  namespace: argocd
+spec:
+  destination:
+    name: ""
+    namespace: NONE
+    server: https://kubernetes.default.svc
+  source:
+    path: ""
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 69.8.2
+    chart: kube-prometheus-stack
+    helm:
+      parameters: []
+      valuesObject:
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 50Gi
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - ServerSideApply=true
