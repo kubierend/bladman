@@ -17,8 +17,8 @@
   path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth/disable_signout_menu"
   value: "true"
 - op: add
-  path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth/anonymus"
+  path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth/anonymous"
   value: {}
 - op: add
-  path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth/anonymus/enabled"
+  path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth/anonymous/enabled"
   value: "true"
