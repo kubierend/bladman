@@ -13,3 +13,6 @@
 - op: add
   path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth/disable_login_form"
   value: "true"
+- op: add
+  path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth/disable_signout_menu"
+  value: "true"
