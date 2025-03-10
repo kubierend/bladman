@@ -7,3 +7,9 @@
 - op: add
   path: "/spec/source/helm/valuesObject/grafana/grafana.ini/server/root_url"
   value: "https://kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net/"
+- op: add
+  path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth"
+  value: "disable_login_form: true"
+- op: add
+  path: "/spec/source/helm/valuesObject/grafana/grafana.ini/auth"
+  value: "disable_signout_menu: true"
