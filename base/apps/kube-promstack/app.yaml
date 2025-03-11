@@ -16,17 +16,34 @@ spec:
     helm:
       parameters: []
       valuesObject:
-        storage:
-          volumeClaimTemplate:
-            spec:
-              storageClassName: longhorn
-              accessModes: ["ReadWriteOnce"]
-              resources:
-                requests:
-                  storage: 50Gi
         prometheus:
           deployment: true
+          prometheusSpec:
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: undefined
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: 100Gi
         grafana:
+          ingress:
+            enabled: true
+            annotations:
+              kubernetes.io/ingress.class: nginx
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+            hosts:
+              - grafana.k8s.arnsi.ch
+            tls:
+              - secretName: grafana-tls
+                hosts:
+                  - grafana.k8s.arnsi.ch
+          persistence:
+            enabled: true
+            storageClassName: undefined
+            size: 1Gi
           grafana.ini:
             server:
               domain: grafana.example.com
