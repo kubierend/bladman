@@ -1,3 +1,6 @@
 - op: replace
   path: "/metadata/namespace"
   value: observability-system
+- op: replace
+  path: "/spec/namespaceSelector/matchNames/0"
+  value: observability-system
