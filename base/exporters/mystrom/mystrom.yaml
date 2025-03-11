@@ -28,6 +28,13 @@ spec:
           "--web.device-path=/device",
           "--target=$(MYSTROM_IP)",
         ]
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor

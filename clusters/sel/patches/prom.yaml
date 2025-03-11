@@ -7,3 +7,13 @@
 - op: add
   path: "/spec/source/helm/valuesObject/grafana/grafana.ini/server/root_url"
   value: "https://kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net/"
+- op: replace
+  path: "/spec/source/helm/valuesObject/grafana/ingress/enabled"
+  value: false
+- op: replace
+  path: "/spec/source/helm/valuesObject/grafana/persistence/storageClassName"
+  value: longhorn
+- op: replace
+  path: "/spec/source/helm/valuesObject/prometheus/prometheusSpec/storageSpec/volumeClaimTemplate/spec/storageClassName"
+  value: longhorn
+

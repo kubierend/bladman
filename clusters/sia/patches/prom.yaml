@@ -1,0 +1,9 @@
+- op: replace
+  path: "/spec/destination/namespace"
+  value: observability-system
+- op: replace
+  path: "/spec/source/helm/valuesObject/grafana/persistence/storageClassName"
+  value: proxmox-data
+- op: replace
+  path: "/spec/source/helm/valuesObject/prometheus/prometheusSpec/storageSpec/volumeClaimTemplate/spec/storageClassName"
+  value: proxmox-data
