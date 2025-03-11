@@ -2,5 +2,5 @@
   path: "/spec/containers/0/env/0/value"
   value: "192.168.1.237"
 - op: replace
-  path: "metadata/namespace"
+  path: "/metadata/namespace"
   value: observability-system

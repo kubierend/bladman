@@ -14,3 +14,7 @@ patches:
     target:
       kind: Pod
       name: mystrom-exporter
+  - path: ./patches/mystrom-podmonitor.yaml
+    target:
+      kind: PodMonitor
+      name: mystrom-exporter-podmonitor
