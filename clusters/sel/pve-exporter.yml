@@ -1,7 +1,0 @@
-apiVersion: v1
-data:
-  pve.yml: cHZlOgogIHVzZXI6ICJwdmVleHBvcnRlckBwYW0iCiAgYXBpX3Rva2VuX2lkOiAicHZlZXhwb3J0ZXJAcGFtLmFzZGZrbGoiCiAgYXBpX3Rva2VuX3NlY3JldDogIjQ1ZmQgMTc4ZS1lMDgxLTRmNGUtYTRmNS1iOTcyNDcyM2M5OTkiCiAgdmVyaWZ5X3NzbDogZmFsc2UK
-kind: Secret
-metadata:
-  creationTimestamp: null
-  name: pveyml
