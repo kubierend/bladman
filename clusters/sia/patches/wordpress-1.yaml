@@ -1,9 +1,0 @@
-- op: replace
-  path: "/spec/sources/0/helm/valuesObject/ingress/tls"
-  value:
-    - secretName: nextcloud-tls
-      hosts:
-        - nextcloud.phonkd.net
-- op: add
-  path: "/spec/sources/0/helm/valuesObject/nextcloud/host"
-  value: nextcloud.phonkd.net

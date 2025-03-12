@@ -1,6 +1,18 @@
-- op: replace
-  path: "/spec/containers/0/env/0/value"
-  value: "192.168.1.237"
-- op: replace
-  path: "/metadata/namespace"
-  value: observability-system
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: patch
+spec:
+  containers:
+    - name: exporter-go-mystrom
+      env:
+        - name: MYSTROM_IP
+          value: "192.168.1.237"
+      args:
+        [
+          "--web.listen-address=0.0.0.0:9452",
+          "--web.device-path=/device",
+          "--target=$(MYSTROM_IP)",
+          "--municipality=Bern",
+        ]
