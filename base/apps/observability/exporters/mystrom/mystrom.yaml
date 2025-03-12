@@ -14,11 +14,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: mystrom-exporter
+      app: eis
   template:
     metadata:
       labels:
-        app: mystrom-exporter
+        app: eis
     spec:
       containers:
         - name: exporter-go-mystrom
