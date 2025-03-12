@@ -3,17 +3,9 @@ kind: Kustomization
 resources:
   #- ../../base/apps/nextcloud
   #- ../../base/apps/wordpress
-  - ../../base/apps/kube-promstack
-  - ../../base/exporters/mystrom
+  - ../../base/apps/observability/kube-promstack
+  - ../../base/apps/observability/mystrom
 patches:
-  - path: ./patches/nc.yaml
-    target:
-      kind: Application
-      name: nextcloud
-  # - path: ./patches/wordpress-1.yaml
-  #   target:
-  #     kind: Application
-  #     name: wordpress-1
   - path: ./patches/prom.yaml
     target:
       kind: Application

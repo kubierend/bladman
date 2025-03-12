@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-operator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: grafana-operator
+    repoURL: ghcr.io/grafana/helm-charts # note: the oci:// syntax is not included.
+    targetRevision: v5.17.0
+  destination:
+    namespace: monit
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true

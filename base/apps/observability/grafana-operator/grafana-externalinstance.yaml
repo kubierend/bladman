@@ -1,0 +1,28 @@
+# apiVersion: grafana.integreatly.org/v1beta1
+# kind: Grafana
+# metadata:
+#   name: grafana-externalinstance
+#   labels:
+#     app: "kube-prom-stack"
+# spec:
+#   external:
+#     url: https://<your-stack-name>.grafana.net
+#     apiKey:
+#       name: grafana-cloud
+#       key: SERVICE_ACCOUNT_TOKEN
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: external-grafana
+  labels:
+    dashboards: "external-grafana"
+spec:
+  external:
+    url: http://kube-prom-stack-grafana.monit.svc.cluster.local:80
+    adminPassword:
+      name: kube-prom-stack-grafana
+      key: admin-password
+    adminUser:
+      name: kube-prom-stack-grafana
+      key: admin-user
