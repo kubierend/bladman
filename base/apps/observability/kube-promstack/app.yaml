@@ -6,7 +6,7 @@ metadata:
 spec:
   destination:
     name: ""
-    namespace: NONE
+    namespace: monit
     server: https://kubernetes.default.svc
   source:
     path: ""
