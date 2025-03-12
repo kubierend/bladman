@@ -13,11 +13,3 @@ patches:
     target:
       kind: Pod
       name: mystrom-exporter
-  - path: ./patches/mystrom-podmonitor.yaml
-    target:
-      kind: PodMonitor
-      name: mystrom-exporter-podmonitor
-  - path: ./patches/grafana.yaml
-    target:
-      kind: Application
-      name: "grafana-operator"
