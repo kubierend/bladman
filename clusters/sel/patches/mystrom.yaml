@@ -1,3 +1,19 @@
-- op: replace
-  path: "/spec/containers/0/env/0/value"
-  value: "192.168.90.230"
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: patch
+spec:
+  template:
+    spec:
+      containers:
+        - name: exporter-go-mystrom
+          env:
+            - name: MYSTROM_IP
+              value: "192.168.90.230"
+          args:
+            [
+              "--web.listen-address=0.0.0.0:9452",
+              "--web.device-path=/device",
+              "--target=$(MYSTROM_IP)",
+              "--municipality=Bern",
+            ]

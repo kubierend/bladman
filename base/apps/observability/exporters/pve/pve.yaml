@@ -26,16 +26,3 @@ spec:
         - name: config-volume
           secret:
             secretName: pveyml
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: prometheus-pve-exporter
-  namespace: monit
-spec:
-  selector:
-    app: prometheus-pve-exporter
-  ports:
-    - protocol: TCP
-      port: 9221
-      targetPort: 9221

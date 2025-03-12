@@ -10,3 +10,19 @@ spec:
       dashboards: "external-grafana"
   grafanaCom:
     id: 10347
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: pve-exporter-podmonitor
+  namespace: monit
+  labels:
+    release: kube-prom-stack
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-pve-exporter # Match the app label from the pod
+  podMetricsEndpoints:
+    - portNumber: 9221 # Port to scrape from the pod
+      path: /pve?target=192.168.1.46 # Default metrics endpoint
+      interval: 3s #
