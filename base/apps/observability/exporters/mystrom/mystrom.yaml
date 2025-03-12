@@ -4,37 +4,49 @@
 # IMPORTANT: The "--target" argument is only available on the custom image build by arno4000 and is used to specify the IP address of the mystrom device
 # IMPORTANT: DONT change the path
 # While debugging this keep in mind that it takes sometimes upto 5 minutes or longer for prometheus to recognize the podmonitor or change paramters of it.
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: mystrom-exporter
   namespace: monit
   labels:
     app: eis
 spec:
-  containers:
-    - name: exporter-go-mystrom
-      #image: ghcr.io/peschmae/exporter-go-mystrom:latest
-      image: ghcr.io/kubierend/myschnibbler:main
-      ports:
-        - containerPort: 9452 # Exposed port
-      command: ["/app/mystrom-exporter"]
-      env:
-        - name: MYSTROM_IP
-          value: "1.2.3.4"
-      args:
-        [
-          "--web.listen-address=0.0.0.0:9452",
-          "--web.device-path=/device",
-          "--target=$(MYSTROM_IP)",
-        ]
-      resources:
-        limits:
-          memory: "128Mi"
-          cpu: "500m"
-        requests:
-          memory: "64Mi"
-          cpu: "250m"
+  selector:
+    matchLabels:
+      app: mystrom-exporter
+  template:
+    metadata:
+      labels:
+        app: mystrom-exporter
+    spec:
+      containers:
+        - name: exporter-go-mystrom
+          imagePullPolicy: Always
+          #image: ghcr.io/peschmae/exporter-go-mystrom:latest
+          image: ghcr.io/kubierend/myschnibbler:main
+          ports:
+            - containerPort: 9452 # Exposed port
+          command: ["/app/mystrom-exporter"]
+          env:
+            - name: MYSTROM_IP
+              value: "1.2.3.4"
+          args:
+            [
+              "--web.listen-address=0.0.0.0:9452",
+              "--web.device-path=/device",
+              "--target=$(MYSTROM_IP)",
+            ]
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+
+
+
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
