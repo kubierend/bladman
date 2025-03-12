@@ -4,7 +4,6 @@ kind: Application
 metadata:
   name: patch
 spec:
-  destination:
   source:
     helm:
       valuesObject:
