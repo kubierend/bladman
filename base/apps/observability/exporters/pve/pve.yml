@@ -1,0 +1,5 @@
+default:
+  user: pveeexporterr@pve
+  password: "sml12345"
+  verify_ssl: false
+# pveum aclmod / -user pveeexporterr -role PVEAuditor

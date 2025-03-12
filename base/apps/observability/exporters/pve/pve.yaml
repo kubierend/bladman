@@ -1,19 +1,4 @@
 # k create secret generic --from-literal=PVE_TOKEN= --from-literal=PVE_USER= -o yaml pve-token-secret
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pve-config
-  namespace: monit
-data:
-  pve.yml: |
-    ---
-    pve:
-      - url: "https://192.168.1.46:8006"
-        api_token_id: "$(PVE_USER)"
-        api_token_secret: "$(PVE_TOKEN)"
-        verify_ssl: false
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,24 +19,13 @@ spec:
           image: prompve/prometheus-pve-exporter
           ports:
             - containerPort: 9221
-          env:
-            - name: PVE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: pve-token-secret
-                  key: PVE_TOKEN
-            - name: PVE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: pve-token-secret
-                  key: PVE_USER
           volumeMounts:
             - name: config-volume
               mountPath: /etc/prometheus/
       volumes:
         - name: config-volume
-          configMap:
-            name: pve-config
+          secret:
+            secretName: pveyml
 ---
 apiVersion: v1
 kind: Service
