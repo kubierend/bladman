@@ -11,5 +11,5 @@ patches:
       name: "kube-prom-stack"
   - path: ./patches/mystrom.yaml
     target:
-      kind: Pod
+      kind: Deployment
       name: mystrom-exporter
