@@ -17,3 +17,7 @@ patches:
     target:
       kind: PodMonitor
       name: mystrom-exporter-podmonitor
+  - path: ./patches/grafana.yaml
+    target:
+      kind: Application
+      name: "grafana-operator"
