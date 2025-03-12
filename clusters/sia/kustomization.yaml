@@ -6,10 +6,10 @@ resources:
   - ../../base/apps/kube-promstack
   - ../../base/exporters/mystrom
 patches:
-  - path: ./patches/prom.yaml
+  - path: "./patches/prom.yaml"
     target:
       kind: Application
-      name: kube-prom-stack
+      name: "kube-prom-stack"
   - path: ./patches/mystrom.yaml
     target:
       kind: Pod

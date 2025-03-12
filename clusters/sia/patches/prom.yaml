@@ -1,9 +1,20 @@
-- op: replace
-  path: "/spec/destination/namespace"
-  value: observability-system
-- op: replace
-  path: "/spec/source/helm/valuesObject/grafana/persistence/storageClassName"
-  value: proxmox-data
-- op: replace
-  path: "/spec/source/helm/valuesObject/prometheus/prometheusSpec/storageSpec/volumeClaimTemplate/spec/storageClassName"
-  value: proxmox-data
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: patch
+spec:
+  destination:
+    namespace: observability-system
+  source:
+    helm:
+      valuesObject:
+        grafana:
+          persistence:
+            storageClassName: proxmox-data
+        prometheus:
+          prometheusSpec:
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: proxmox-data
