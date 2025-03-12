@@ -3,8 +3,7 @@ kind: Kustomization
 resources:
   #- ../../base/apps/nextcloud
   #- ../../base/apps/wordpress
-  - ../../base/apps/observability/kube-promstack
-  - ../../base/apps/observability/mystrom
+  - ../../base
 patches:
   - path: "./patches/prom.yaml"
     target:

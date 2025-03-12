@@ -4,3 +4,4 @@ resources:
   - ./apps/observability/grafana-operator
   - ./apps/observability/kube-promstack
   - ./hacks
+  - ./apps/observability/exporters
