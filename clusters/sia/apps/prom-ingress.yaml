@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: prometheus.k8s.anrsi.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: kube-prom-stack-kube-prome-prometheus
+            port: 
+              number: 9090
+  tls:
+    - hosts:
+      - prometheus.k8s.anrsi.ch
+      secretName: prometheus-tls
