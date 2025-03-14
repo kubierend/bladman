@@ -24,5 +24,8 @@ spec:
       app: prometheus-pve-exporter # Match the app label from the pod
   podMetricsEndpoints:
     - portNumber: 9221 # Port to scrape from the pod
-      path: /pve?target=192.168.1.46 # Default metrics endpoint
+      path: /pve #?target=192.168.1.46 # Default metrics endpoint
+      params:
+        target: ["192.168.1.46"]
       interval: 3s #
+      scheme: http
