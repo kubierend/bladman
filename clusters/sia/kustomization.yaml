@@ -4,6 +4,7 @@ resources:
   #- ../../base/apps/nextcloud
   #- ../../base/apps/wordpress
   - ../../base
+  - apps/
 patches:
   - path: "./patches/prom.yaml"
     target:
