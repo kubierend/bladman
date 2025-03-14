@@ -1,0 +1,17 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: grafanadatasource-kubepromstack
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: "external-grafana"
+  datasource:
+    name: prometheuschnibbler
+    type: prometheus
+    access: proxy
+    url: http://kube-prom-stack-kube-prome-prometheus:9090
+    isDefault: false
+    jsonData:
+      "tlsSkipVerify": true
+      "timeInterval": "5s"

@@ -8,6 +8,9 @@ spec:
     matchLabels:
       #dashboards: "grafana"
       dashboards: "external-grafana"
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
   grafanaCom:
     id: 10347
 ---
