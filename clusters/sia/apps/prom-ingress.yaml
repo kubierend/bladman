@@ -7,8 +7,9 @@ metadata:
     kubernetes.io/ingress.class: nginx
   namespace: monit
 spec:
+  ingressClassName: nginx
   rules:
-  - host: prometheus.k8s.anrsi.ch
+  - host: prometheus.k8s.arnsi.ch
     http:
       paths:
       - pathType: Prefix
@@ -20,5 +21,5 @@ spec:
               number: 9090
   tls:
     - hosts:
-      - prometheus.k8s.anrsi.ch
+      - prometheus.k8s.arnsi.ch
       secretName: prometheus-tls

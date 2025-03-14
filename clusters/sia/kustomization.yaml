@@ -14,3 +14,8 @@ patches:
     target:
       kind: Deployment
       name: mystrom-exporter
+  - path: ./patches/pve-exporter.yaml
+    target:
+      kind: PodMonitor
+      name: pve-exporter-podmonitor
+
