@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: patch
+spec:
+  staticConfigs:
+    - labels:
+        job: node-exporter
+      targets:
+        - 192.168.1.46:9100

@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../../base
   #- ../../base/apps/exporters/
+  - ./custom-dashboard.yaml
 patches:
   - path: ./patches/prom.yaml
     target:
@@ -12,3 +13,7 @@ patches:
     target:
       kind: Deployment
       name: mystrom-exporter
+  - path: ./patches/pve-nodexporter-patch.yaml
+    target:
+      kind: ScrapeConfig
+      name: proxmox
