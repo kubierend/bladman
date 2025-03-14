@@ -7,6 +7,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
   namespace: monit
 spec:
+  ingressClassName: nginx
   rules:
   - host: prometheus.k8s.anrsi.ch
     http:
