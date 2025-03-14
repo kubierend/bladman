@@ -1,7 +1,8 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: sample-dashboard
+  name: mystrom-exporter
+  namespace: monit
 spec:
   resyncPeriod: 30s
   instanceSelector:
@@ -14,7 +15,7 @@ spec:
         "list": [
           {
             "$$hashKey": "object:215",
-            "builtIn": 1,
+            "builtIn": 0,
             "datasource": {
               "type": "datasource",
               "uid": "grafana"
@@ -39,7 +40,7 @@ spec:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 30,
+      "id": null,
       "links": [],
       "panels": [
         {
@@ -238,7 +239,6 @@ spec:
       "timepicker": {},
       "timezone": "",
       "title": "mystrom",
-      "uid": "Dp7Cd57Zza",
       "version": 4,
       "weekStart": ""
     }
