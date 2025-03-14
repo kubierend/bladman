@@ -4,4 +4,5 @@ resources:
   - grafana-externalinstance.yaml
   - ./dashboards/pve-dashboard.yaml
   - ./dashboards/mystrom-exporter-dashboard.yaml
+  - ./dashboards/node-exporter-dashboard.yaml
   - app.yaml
