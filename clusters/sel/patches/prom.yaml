@@ -17,10 +17,10 @@ spec:
               domain: kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net
               root_url: "https://kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net/"
           persistence:
-            storageClassName: longhorn
+            storageClassName: proxmox-data-xfs
         prometheus:
           prometheusSpec:
             storageSpec:
               volumeClaimTemplate:
                 spec:
-                  storageClassName: longhorn
+                  storageClassName: proxmox-data-xfs
