@@ -14,8 +14,8 @@ spec:
             enabled: false
           grafana.ini:
             server:
-              domain: kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net
-              root_url: "https://kube-prom-stack-grafana-monit-phonkr.teleport.phonkd.net/"
+              domain: kube-prom-stack-grafana-monit-nix-k8s.teleport.phonkd.net
+              root_url: "https://kube-prom-stack-grafana-monit-nix-k8s.teleport.phonkd.net/"
           persistence:
             storageClassName: nvme-zfs
         prometheus:
