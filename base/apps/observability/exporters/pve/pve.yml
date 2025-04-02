@@ -3,3 +3,4 @@ default:
   password: "sml12345"
   verify_ssl: false
 # pveum aclmod / -user pveeexporterr -role PVEAuditor
+# k create secret generic pveyml --from-file pve.yml --dry-run=client -o yaml

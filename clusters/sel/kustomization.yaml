@@ -4,6 +4,7 @@ resources:
   - ../../base
   #- ../../base/apps/exporters/
   - ./custom-dashboard.yaml
+  - ./secrets
 patches:
   - path: ./patches/prom.yaml
     target:
