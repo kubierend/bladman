@@ -10,7 +10,7 @@ spec:
     server: https://kubernetes.default.svc
   source:
     path: ""
-    repoURL: ghcr.io/kubierend/ocis
+    repoURL: ghcr.io/kubierend
     targetRevision: 0.7.0
     chart: ocis
     helm:
