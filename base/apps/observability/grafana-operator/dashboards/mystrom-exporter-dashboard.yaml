@@ -52,7 +52,7 @@ spec:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 710,
+      "id": 796,
       "links": [],
       "panels": [
         {
@@ -230,7 +230,7 @@ spec:
                 "uid": "b4fd5a2b-f3dc-498f-940e-c2d60c8059d9"
               },
               "editorMode": "code",
-              "expr": "mystrom_temperature",
+              "expr": "sum by() (mystrom_temperature)",
               "instant": false,
               "legendFormat": "__auto",
               "range": true,
@@ -379,13 +379,13 @@ spec:
         "list": []
       },
       "time": {
-        "from": "now-2d",
+        "from": "now-30d",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "",
       "title": "mystrom",
-      "uid": "befwxfek6rj7ka",
-      "version": 5,
+      "uid": "bejarup0zvocgc",
+      "version": 1,
       "weekStart": ""
     }
