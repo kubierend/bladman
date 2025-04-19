@@ -19,6 +19,7 @@ spec:
         prometheus:
           deployment: true
           prometheusSpec:
+            enableRemoteWriteReceiver: true
             storageSpec:
               volumeClaimTemplate:
                 spec:
