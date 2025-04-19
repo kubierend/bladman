@@ -20,6 +20,8 @@ spec:
           deployment: true
           prometheusSpec:
             enableRemoteWriteReceiver: true
+            remotewrite:
+              - url: https://prometheus.nixk8s.phonkd.net/api/v1/write
             storageSpec:
               volumeClaimTemplate:
                 spec:
